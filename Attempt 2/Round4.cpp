@@ -16,7 +16,7 @@ class employee {
             Dept = dept;
             Des = des;
             ReportTo = reportTo;
-            cout << Id << ", " << Name << ", " << Age << ", " << Dept << ", " << Des << ", " << ReportTo << endl;
+            // cout << Id << ", " << Name << ", " << Age << ", " << Dept << ", " << Des << ", " << ReportTo << endl;
         }
 
         void display(int maxName, int maxDept, int maxDes, int maxReportTo) {
@@ -100,8 +100,18 @@ void tableHeaders(int maxName, int maxDept, int maxDes, int maxReportTo) {
 
 int main() {
 	vector<employee> e;
-    int id = 0, age, maxName = 10, maxDept = 10, maxDes = 11, maxReportTo = 10;
-	string name, dept, des, reportTo; 
+    int id = 0, age, maxName = 31, maxDept = 20, maxDes = 28, maxReportTo = 31;
+	string name, dept, des, reportTo;
+    // Some hard-coded data so that I don't have to keep entering values at the command line every time I need to test.
+    // TODO: Add functionality to read and write to file containing data.
+    e.push_back(employee(++id, "Sundar Pichai", 42, "Management", "CEO", "--"));
+    e.push_back(employee(++id, "Pricilla Cathrin Trichet Wilson", 45, "HR", "HR Manager", "Sundar Pichai"));
+    e.push_back(employee(++id, "Manoj. M", 39, "Software Development", "Software Development Manager", "Sundar Pichai"));
+    e.push_back(employee(++id, "Kiruthiga. R", 41, "QA", "QA Manager", "Sundar Pichai"));
+    e.push_back(employee(++id, "Siddharth Prince", 35, "Software Development", "Lead Developer", "Manoj. M"));
+    e.push_back(employee(++id, "Daniel Raj", 32, "QA", "Testing Lead", "Kiruthiga. R"));
+    e.push_back(employee(++id, "Keerthana. T", 29, "HR", "HR Associate", "Pricilla Cathrin Trichet Wilson"));
+    e.push_back(employee(++id, "Sharad Kumar Singh", 25, "Software Development", "Associate Developer", "Siddharth Prince"));
     int ch = 2;
     cout << "Welcome to the Employee Database Manager!\n\n";
     while(ch != 0) {
@@ -153,6 +163,17 @@ int main() {
                 cout << "Record successfully created!" << endl;
                 break;
             }
+
+            case 3:
+            {
+                int categoryCh;
+                cout << "Enter category to search by (1. Name, 2. Age, 3. Department, 4. Designation, 5. Reporting to): ";
+                cin >> categoryCh;
+
+            }
+
+            default:
+                cout << "Please enter a valid option." << endl;
 
         }
     }

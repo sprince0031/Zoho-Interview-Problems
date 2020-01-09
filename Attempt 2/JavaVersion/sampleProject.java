@@ -35,63 +35,43 @@ class employee {
 
     }
 
-    void search(int filter, String searchTerm, String dataMember, int maxName, int maxDept, int maxDes, int maxReportTo) {
+    boolean search(int filter, String searchTerm, String dataMember, int maxName, int maxDept, int maxDes, int maxReportTo) {
         dataMember = dataMember.toLowerCase();
         switch(filter) {
             case 1:
-                if(dataMember.equalsIgnoreCase(searchTerm))
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return dataMember.equalsIgnoreCase(searchTerm);
             case 2:
-                if(!(dataMember.equalsIgnoreCase(searchTerm)))
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return !(dataMember.equalsIgnoreCase(searchTerm));
             case 3:
-                if(dataMember.startsWith(searchTerm.toLowerCase()))
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return dataMember.startsWith(searchTerm.toLowerCase());
             case 4:
-                if(dataMember.endsWith(searchTerm.toLowerCase()))
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return dataMember.endsWith(searchTerm.toLowerCase());
             case 5:
-                if(dataMember.contains(searchTerm.toLowerCase()))
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return dataMember.contains(searchTerm.toLowerCase());
             case 6:
-                if(!(dataMember.contains(searchTerm.toLowerCase())))
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return !(dataMember.contains(searchTerm.toLowerCase()));
         }
+        return false;
     }
 
-    void search(int filter, int searchTerm, int dataMember, int upper, int lower, int maxName, int maxDept, int maxDes, int maxReportTo) {
+    boolean search(int filter, int searchTerm, int dataMember, int upper, int lower, int maxName, int maxDept, int maxDes, int maxReportTo) {
         switch(filter) {
             case 1:
-                if(dataMember == searchTerm)
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return dataMember == searchTerm;
+
             case 2:
-                if(dataMember != searchTerm)
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return dataMember != searchTerm;
+
             case 3:
-                if(dataMember > searchTerm)
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return dataMember > searchTerm;
+
             case 4:
-                if(dataMember < searchTerm)
-                    display(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                return dataMember < searchTerm;
+
             case 5:
-                {
-                    // Scanner input = new Scanner(System.in);
-                    // input.close();
-                    if(dataMember <= upper && dataMember >= lower)
-                        display(maxName, maxDept, maxDes, maxReportTo);
-                }
-                break;
+                return dataMember <= upper && dataMember >= lower;
         }
+        return false;
     }
 
 }
@@ -122,11 +102,12 @@ class tester extends employee {
 
 public class sampleProject {
 
-    static void search(int fieldType, String searchTerm, int filter, ArrayList<employee> emp, int maxName, int maxDept, int maxDes, int maxReportTo) {
+    static ArrayList<employee> search(int fieldType, String searchTerm, int filter, ArrayList<employee> emp, int maxName, int maxDept, int maxDes, int maxReportTo) {
         Scanner input = new Scanner(System.in);
         int upper = -1;
         int lower = -1;
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
+        ArrayList<employee> searchResults = new ArrayList<employee>();
         if (fieldType == -1) {
             System.out.print("Enter the field to search with:\n1. Name\n2. Age\n3. Department\n4. Designation\n5. Reports To\nEnter choice: ");
             fieldType = input.nextInt();
@@ -153,11 +134,11 @@ public class sampleProject {
                 }
             }
         }
-        tableHeaders(maxName, maxDept, maxDes, maxReportTo);
         if (fieldType == 2) {
             
             for (employee record : emp) {
-                record.search(filter, Integer.parseInt(searchTerm), record.Age, upper, lower, maxName, maxDept, maxDes, maxReportTo);
+                if(record.search(filter, Integer.parseInt(searchTerm), record.Age, upper, lower, maxName, maxDept, maxDes, maxReportTo))
+                    searchResults.add(record);
             }    
         }
         else {        
@@ -165,7 +146,8 @@ public class sampleProject {
                 case 1:
                 {
                     for (employee record : emp) {
-                        record.search(filter, searchTerm, record.Name, maxName, maxDept, maxDes, maxReportTo);
+                        if(record.search(filter, searchTerm, record.Name, maxName, maxDept, maxDes, maxReportTo))
+                            searchResults.add(record);
                     }
                     break;
                 }
@@ -173,7 +155,8 @@ public class sampleProject {
                 case 3:
                 {
                     for (employee record : emp) {
-                        record.search(filter, searchTerm, record.Dept, maxName, maxDept, maxDes, maxReportTo);
+                        if(record.search(filter, searchTerm, record.Dept, maxName, maxDept, maxDes, maxReportTo))
+                            searchResults.add(record);
                     }
                     break;
                 }
@@ -181,7 +164,8 @@ public class sampleProject {
                 case 4:
                 {
                     for (employee record : emp) {
-                        record.search(filter, searchTerm, record.Des, maxName, maxDept, maxDes, maxReportTo);
+                        if(record.search(filter, searchTerm, record.Des, maxName, maxDept, maxDes, maxReportTo))
+                            searchResults.add(record);
                     }
                     break;
                 }
@@ -189,7 +173,8 @@ public class sampleProject {
                 case 5:
                 {
                     for (employee record : emp) {
-                        record.search(filter, searchTerm, record.RepTo, maxName, maxDept, maxDes, maxReportTo);
+                        if(record.search(filter, searchTerm, record.RepTo, maxName, maxDept, maxDes, maxReportTo))
+                            searchResults.add(record);
                     }
                     break;
                 }
@@ -197,6 +182,8 @@ public class sampleProject {
             }
 
         }
+        
+        return searchResults;
         // input.close();
 
     }
@@ -266,6 +253,7 @@ public class sampleProject {
         int id = 0, age, maxName = 17, maxDept = 20, maxDes = 28, maxReportTo = 8;
         String name, dept, des, reportTo;
         ArrayList<employee> e = new ArrayList<employee>();
+        ArrayList<employee> searchResults = new ArrayList<employee>();
         e.add(new employee(++id, "Pricilla Wilson", 45, "HR", "HR Manager", "John Doe"));
         e.add(new employee(++id, "Manoj. M", 39, "Development", "Software Development Manager", "Jan Doe"));
         e.add(new employee(++id, "Kiruthiga. R", 41, "QA", "QA Manager", "John Doe"));
@@ -279,56 +267,56 @@ public class sampleProject {
             System.out.print("Enter choice: ");
             ch = input.nextInt();
             switch (ch) {
-            case 0: {
-                System.out.println("Exiting now...");
-                System.exit(0);
-                break;
-            }
+                case 0: {
+                    System.out.println("Exiting now...");
+                    System.exit(0);
+                    break;
+                }
 
-            case 1: {
-                tableHeaders(maxName, maxDept, maxDes, maxReportTo);
-                for (int i = 0; i < e.size(); i++) {
-                    e.get(i).display(maxName, maxDept, maxDes, maxReportTo);
+                case 1: {
+                    tableHeaders(maxName, maxDept, maxDes, maxReportTo);
+                    for (int i = 0; i < e.size(); i++) {
+                        e.get(i).display(maxName, maxDept, maxDes, maxReportTo);
+                        printBorder(maxName, maxDept, maxDes, maxReportTo);
+                    }
+                    break;
+                }
+
+                case 2: {
+                    System.out.print("Enter employee's name: ");
+                    name = stringInput.readLine();
+                    System.out.print("Enter employee's age: ");
+                    age = input.nextInt();
+                    System.out.print("Enter employee's department: ");
+                    dept = stringInput.readLine();
+                    System.out.print("Enter employee's designation: ");
+                    des = stringInput.readLine();
+                    System.out.print("Enter employee's manager to report to: ");
+                    reportTo = stringInput.readLine();
+                    maxName = (name.length() > maxName) ? name.length() : maxName;
+                    maxDept = (dept.length() > maxDept) ? dept.length() : maxDept;
+                    maxDes = (des.length() > maxDes) ? des.length() : maxDes;
+                    maxReportTo = (reportTo.length() > maxReportTo) ? reportTo.length() : maxReportTo;
+                    e.add(new employee(++id, name, age, dept, des, reportTo));
+                    System.out.print("Record successfully created!");
+                    break;
+                }
+
+                case 3: {
+                    searchResults = search(-1, "", -1, e, maxName, maxDept, maxDes, maxReportTo);
+                    tableHeaders(maxName, maxDept, maxDes, maxReportTo);
+                    for (employee result : searchResults) {
+                        result.display(maxName, maxDept, maxDes, maxReportTo);
+                    }
                     printBorder(maxName, maxDept, maxDes, maxReportTo);
-                }
-                break;
-            }
-
-            case 2: {
-                System.out.print("Enter employee's name: ");
-                name = stringInput.readLine();
-                System.out.print("Enter employee's age: ");
-                age = input.nextInt();
-                System.out.print("Enter employee's department: ");
-                dept = stringInput.readLine();
-                System.out.print("Enter employee's designation: ");
-                des = stringInput.readLine();
-                System.out.print("Enter employee's manager to report to: ");
-                reportTo = stringInput.readLine();
-                maxName = (name.length() > maxName) ? name.length() : maxName;
-                maxDept = (dept.length() > maxDept) ? dept.length() : maxDept;
-                maxDes = (des.length() > maxDes) ? des.length() : maxDes;
-                maxReportTo = (reportTo.length() > maxReportTo) ? reportTo.length() : maxReportTo;
-                e.add(new employee(++id, name, age, dept, des, reportTo));
-                System.out.print("Record successfully created!");
-                break;
-            }
-
-            case 3: {
-                search(-1, "", -1, e, maxName, maxDept, maxDes, maxReportTo);
-                printBorder(maxName, maxDept, maxDes, maxReportTo);
-                break;
+                    break;
                 }
 
-                // case 7:
-                // {
+                // case 4: {
+                //     String empReportQuery;
+                //     System.out.print("Enter the name of the employee: ");
+                //     empReportQuery = stringInput.readLine();
                     
-                //     System.out.println("Enter employee's department: ");
-                //     // String empDept = stringInput.readLine();
-                //     // if (empDept == "Development") {
-                        
-                //     // }
-                //     break;
                 // }
 
                 default:

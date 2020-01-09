@@ -35,6 +35,69 @@ class employee {
 
     }
 
+    void search(int filter, String searchTerm, String dataMember, int maxName, int maxDept, int maxDes, int maxReportTo) {
+        dataMember = dataMember.toLowerCase();
+        switch(filter) {
+            case 1:
+                if(dataMember.equalsIgnoreCase(searchTerm))
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 2:
+                if(!(dataMember.equalsIgnoreCase(searchTerm)))
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 3:
+                if(dataMember.startsWith(searchTerm.toLowerCase()))
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 4:
+                if(dataMember.endsWith(searchTerm.toLowerCase()))
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 5:
+                if(dataMember.contains(searchTerm.toLowerCase()))
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 6:
+                if(!(dataMember.contains(searchTerm.toLowerCase())))
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+        }
+    }
+
+    void search(int filter, int searchTerm, int dataMember, int maxName, int maxDept, int maxDes, int maxReportTo) {
+        switch(filter) {
+            case 1:
+                if(dataMember == searchTerm)
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 2:
+                if(dataMember != searchTerm)
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 3:
+                if(dataMember > searchTerm)
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 4:
+                if(dataMember < searchTerm)
+                    display(maxName, maxDept, maxDes, maxReportTo);
+                break;
+            case 5:
+                {
+                    Scanner input = new Scanner(System.in);
+                    System.out.print("Enter the upper value of the range: ");
+                    int upper = input.nextInt();
+                    System.out.print("Enter the lower value of the range: ");
+                    int lower = input.nextInt();
+                    // input.close();
+                    if(searchTerm <= upper && searchTerm >= lower)
+                        display(maxName, maxDept, maxDes, maxReportTo);
+                }
+                break;
+        }
+    }
+
 }
 
 class dev extends employee {
@@ -63,28 +126,78 @@ class tester extends employee {
 
 public class sampleProject {
 
-    static void searchString(String searchTerm) {
+    // static void foreachMethod(ArrayList<employee> e, int filter, String searchTerm, ) {
+        
+    //     for(employee record: e) {
+    //         if (record.search(filter, searchTerm, dataMember))
+    //     }
+    // }
 
-    }
-
-    static void searchNums(int searchTerm) {
-
-    }
-
-    static void search(int fieldType, String searchTerm) {
+    static void search(int fieldType, String searchTerm, int filter, ArrayList<employee> emp, int maxName, int maxDept, int maxDes, int maxReportTo) {
+        Scanner input = new Scanner(System.in);
+        BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
         if (fieldType == -1) {
-            System.out.print(
-                    "Enter the field to search with:\n1. Name\n2. Age\n3. Department\n4. Designation\n5. Reports To\nEnter choice: ");
-            Scanner input = new Scanner(System.in);
+            System.out.print("Enter the field to search with:\n1. Name\n2. Age\n3. Department\n4. Designation\n5. Reports To\nEnter choice: ");
             fieldType = input.nextInt();
-            input.close();
-        }
-        if (fieldType != 2)
-            searchString(searchTerm);
+            if (fieldType == 2)
+                System.out.print("Select the search filter:\n1. Equal to\n2. Not equal to\n3. Greater than\n4. Less than\n5. Range\nEnter choice: ");
+            else
+                System.out.print("Select the search filter:\n1. Exactly matches\n2. Does not match\n3. Starts with\n4. Ends with\n5. Contains\n6. Does not contain\nEnter choice: ");
+            filter = input.nextInt();
 
-        else {
-            searchNums(Integer.parseInt(searchTerm));
+            System.out.print("Enter search term: ");
+            try {
+                searchTerm = stringInput.readLine();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
+        tableHeaders(maxName, maxDept, maxDes, maxReportTo);
+        if (fieldType == 2) {
+            
+            for (employee record : emp) {
+                record.search(filter, Integer.parseInt(searchTerm), record.Age, maxName, maxDept, maxDes, maxReportTo);
+            }    
+        }
+        else {        
+            switch(fieldType) {
+                case 1:
+                {
+                    for (employee record : emp) {
+                        record.search(filter, searchTerm, record.Name, maxName, maxDept, maxDes, maxReportTo);
+                    }
+                    break;
+                }
+
+                case 3:
+                {
+                    for (employee record : emp) {
+                        record.search(filter, searchTerm, record.Dept, maxName, maxDept, maxDes, maxReportTo);
+                    }
+                    break;
+                }
+
+                case 4:
+                {
+                    for (employee record : emp) {
+                        record.search(filter, searchTerm, record.Des, maxName, maxDept, maxDes, maxReportTo);
+                    }
+                    break;
+                }
+
+                case 5:
+                {
+                    for (employee record : emp) {
+                        record.search(filter, searchTerm, record.RepTo, maxName, maxDept, maxDes, maxReportTo);
+                    }
+                    break;
+                }
+
+            }
+
+        }
+        // input.close();
 
     }
 
@@ -203,7 +316,9 @@ public class sampleProject {
             }
 
             case 3: {
-                search(-1, "");
+                search(-1, "", -1, e, maxName, maxDept, maxDes, maxReportTo);
+                printBorder(maxName, maxDept, maxDes, maxReportTo);
+                break;
                 }
 
                 case 7:
@@ -214,13 +329,14 @@ public class sampleProject {
                     // if (empDept == "Development") {
                         
                     // }
+                    break;
                 }
 
                 default:
                     System.out.println("Please enter a valid option!");
             }
         }
-        input.close();
+        // input.close();
 
     }
 }

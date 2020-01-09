@@ -103,9 +103,19 @@ class tester extends employee {
 
 public class sampleProject {
 
-    // static void employeeTree() {
-
-    // }
+    static String employeeTree(String empTreeQuery, String treeString, ArrayList<employee> emp, int maxName, int maxDept, int maxDes, int maxReportTo) {
+        // System.out.println(treeString);
+        ArrayList<employee> searchResults = search(1, empTreeQuery, 1, emp, false, maxName, maxDept, maxDes, maxReportTo);
+        Iterator<employee> it = searchResults.listIterator();
+        // System.out.println(result.RepTo);
+        if (searchResults.isEmpty())
+            return treeString;
+        else {
+            employee result = it.next();
+            treeString += " -> " + result.RepTo; 
+            return employeeTree(result.RepTo, treeString, emp, maxName, maxDept, maxDes, maxReportTo);
+        }
+    }
 
     static ArrayList<employee> search(int fieldType, String searchTerm, int filter, ArrayList<employee> emp, boolean displayFlag, int maxName, int maxDept, int maxDes, int maxReportTo) {
         Scanner input = new Scanner(System.in);
@@ -312,7 +322,7 @@ public class sampleProject {
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
         int ch = -1;
         while (ch != 0) {
-            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report\n5. Employee Tree(TODO)\n6. Summary(TODO)\n7. Perform Employee Type Specific Task(TODO)\n0. Exit");
+            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report\n5. Employee Tree\n6. Summary(TODO)\n7. Perform Employee Type Specific Task(TODO)\n0. Exit");
             System.out.print("Enter choice: ");
             ch = input.nextInt();
             switch (ch) {
@@ -381,13 +391,16 @@ public class sampleProject {
                     break;
                 }
 
-                // case 5:
-                // {
-                //     String empTreeQuery;
-                //     System.out.print("Enter the name of the employee: ");
-                //     empTreeQuery = stringInput.readLine();
-                //     searchResults = search(fieldType, searchTerm, filter, emp, displayFlag, maxName, maxDept, maxDes, maxReportTo)
-                // }
+                case 5:
+                {
+                    String empTreeQuery, treeString;
+                    System.out.print("Enter the name of the employee: ");
+                    empTreeQuery = stringInput.readLine();
+                    treeString = employeeTree(empTreeQuery, empTreeQuery, e, maxName, maxDept, maxDes, maxReportTo);
+                    if (!(treeString.isEmpty()))
+                        System.out.println("The employee tree is:\n" + treeString + "\n");
+                    break;
+                }
 
                 default:
                     System.out.println("Please enter a valid option!");

@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -102,85 +103,133 @@ class tester extends employee {
 
 public class sampleProject {
 
-    static ArrayList<employee> search(int fieldType, String searchTerm, int filter, ArrayList<employee> emp, int maxName, int maxDept, int maxDes, int maxReportTo) {
+    // static void employeeTree() {
+
+    // }
+
+    static ArrayList<employee> search(int fieldType, String searchTerm, int filter, ArrayList<employee> emp, boolean displayFlag, int maxName, int maxDept, int maxDes, int maxReportTo) {
         Scanner input = new Scanner(System.in);
         int upper = -1;
         int lower = -1;
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
         ArrayList<employee> searchResults = new ArrayList<employee>();
-        if (fieldType == -1) {
-            System.out.print("Enter the field to search with:\n1. Name\n2. Age\n3. Department\n4. Designation\n5. Reports To\nEnter choice: ");
-            fieldType = input.nextInt();
-            if (fieldType == 2) 
-                System.out.print("Select the search filter:\n1. Equal to\n2. Not equal to\n3. Greater than\n4. Less than\n5. Range\nEnter choice: ");
-
-            else
-                System.out.print("Select the search filter:\n1. Exactly matches\n2. Does not match\n3. Starts with\n4. Ends with\n5. Contains\n6. Does not contain\nEnter choice: ");
-            filter = input.nextInt();
-            if (fieldType == 2 && filter == 5) {
-                System.out.print("Enter the upper value of the range: ");
-                upper = input.nextInt();
-                System.out.print("Enter the lower value of the range: ");
-                lower = input.nextInt();
-                searchTerm = "-1";
+        searchResults.addAll(emp);
+        boolean moreFilters = true;
+        boolean presetField = false;
+        if (fieldType != -1)
+            presetField = true;
+        while (moreFilters == true) {
+            if (fieldType == -1) {
+                System.out.print("Enter the field to search with:\n1. Name\n2. Age\n3. Department\n4. Designation\n5. Reports To\nEnter choice: ");
+                fieldType = input.nextInt();
             }
-            else {
-                System.out.print("Enter search term: ");
-                try {
-                    searchTerm = stringInput.readLine();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+            if (filter == -1) {
+                if (fieldType == 2) 
+                    System.out.print("Select the search filter:\n1. Equal to\n2. Not equal to\n3. Greater than\n4. Less than\n5. Range\nEnter choice: ");
+
+                else
+                    System.out.print("Select the search filter:\n1. Exactly matches\n2. Does not match\n3. Starts with\n4. Ends with\n5. Contains\n6. Does not contain\nEnter choice: ");
+                filter = input.nextInt();
+            }
+            if (searchTerm == "") {
+                if (fieldType == 2 && filter == 5) {
+                    System.out.print("Enter the upper value of the range: ");
+                    upper = input.nextInt();
+                    System.out.print("Enter the lower value of the range: ");
+                    lower = input.nextInt();
+                    searchTerm = "-1";
+                }
+                else {
+                    System.out.print("Enter search term: ");
+                    try {
+                        searchTerm = stringInput.readLine();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
-        if (fieldType == 2) {
             
-            for (employee record : emp) {
-                if(record.search(filter, Integer.parseInt(searchTerm), record.Age, upper, lower, maxName, maxDept, maxDes, maxReportTo))
-                    searchResults.add(record);
-            }    
-        }
-        else {        
-            switch(fieldType) {
-                case 1:
-                {
-                    for (employee record : emp) {
-                        if(record.search(filter, searchTerm, record.Name, maxName, maxDept, maxDes, maxReportTo))
-                            searchResults.add(record);
+            Iterator<employee> it = searchResults.listIterator();
+            if (fieldType == 2) {
+                
+                while (it.hasNext()) {
+                    employee record = it.next();
+                    if(!(record.search(filter, Integer.parseInt(searchTerm), record.Age, upper, lower, maxName, maxDept, maxDes, maxReportTo)))
+                        it.remove();
+                }    
+            }
+            else {        
+                switch(fieldType) {
+                    case 1:
+                    {
+                        while (it.hasNext()) {
+                            employee record = it.next();
+                            if(!(record.search(filter, searchTerm, record.Name, maxName, maxDept, maxDes, maxReportTo)))
+                                it.remove();
+                        }
+                        break;
                     }
-                    break;
-                }
 
-                case 3:
-                {
-                    for (employee record : emp) {
-                        if(record.search(filter, searchTerm, record.Dept, maxName, maxDept, maxDes, maxReportTo))
-                            searchResults.add(record);
+                    case 3:
+                    {
+                        while (it.hasNext()) {
+                            employee record = it.next();
+                            if(!(record.search(filter, searchTerm, record.Dept, maxName, maxDept, maxDes, maxReportTo)))
+                                it.remove();
+                        }
+                        break;
                     }
-                    break;
-                }
 
-                case 4:
-                {
-                    for (employee record : emp) {
-                        if(record.search(filter, searchTerm, record.Des, maxName, maxDept, maxDes, maxReportTo))
-                            searchResults.add(record);
+                    case 4:
+                    {
+                        while (it.hasNext()) {
+                            employee record = it.next();
+                            if(!(record.search(filter, searchTerm, record.Des, maxName, maxDept, maxDes, maxReportTo)))
+                                it.remove();
+                        }
+                        break;
                     }
-                    break;
-                }
 
-                case 5:
-                {
-                    for (employee record : emp) {
-                        if(record.search(filter, searchTerm, record.RepTo, maxName, maxDept, maxDes, maxReportTo))
-                            searchResults.add(record);
+                    case 5:
+                    {
+                        while (it.hasNext()) {
+                            employee record = it.next();
+                            if(!(record.search(filter, searchTerm, record.RepTo, maxName, maxDept, maxDes, maxReportTo)))
+                                it.remove();
+                        }
+                        break;
                     }
-                    break;
+
                 }
 
             }
+            if (displayFlag == false)
+                return searchResults;
+            // display results
+            tableHeaders(maxName, maxDept, maxDes, maxReportTo);
+            for (employee result: searchResults)
+                result.display(maxName, maxDept, maxDes, maxReportTo);
+            printBorder(maxName, maxDept, maxDes, maxReportTo);
 
+            System.out.print("\nDo you want to\n1. Add more filters?\n2. Clear all filters?\n3. Stop search?\nEnter choice: ");
+            int choice = input.nextInt();
+            if (choice == 1) {
+                if (!presetField)
+                    fieldType = -1;
+                searchTerm = "";
+                filter = -1;
+            }
+            else if (choice == 2) {
+                searchResults.clear();
+                searchResults.addAll(emp);
+                if (!presetField)
+                    fieldType = -1;
+                searchTerm = "";
+                filter = -1;
+            }
+            else
+                moreFilters = false;
         }
         
         return searchResults;
@@ -255,7 +304,7 @@ public class sampleProject {
         ArrayList<employee> e = new ArrayList<employee>();
         ArrayList<employee> searchResults = new ArrayList<employee>();
         e.add(new employee(++id, "Pricilla Wilson", 45, "HR", "HR Manager", "John Doe"));
-        e.add(new employee(++id, "Manoj. M", 39, "Development", "Software Development Manager", "Jan Doe"));
+        e.add(new employee(++id, "Manoj. M", 39, "Development", "Software Development Manager", "Jane Doe"));
         e.add(new employee(++id, "Kiruthiga. R", 41, "QA", "QA Manager", "John Doe"));
         e.add(new employee(++id, "Siddharth Prince", 35, "Development", "Lead Developer", "Manoj. M"));
         System.out.println("Welcome to the Employee Database Manager!");
@@ -263,7 +312,7 @@ public class sampleProject {
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
         int ch = -1;
         while (ch != 0) {
-            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report (TODO)\n5. Employee Tree(TODO)\n6. Summary(TODO)\n7. Perform Employee Type Specific Task(TODO)\n0. Exit");
+            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report\n5. Employee Tree(TODO)\n6. Summary(TODO)\n7. Perform Employee Type Specific Task(TODO)\n0. Exit");
             System.out.print("Enter choice: ");
             ch = input.nextInt();
             switch (ch) {
@@ -303,7 +352,7 @@ public class sampleProject {
                 }
 
                 case 3: {
-                    searchResults = search(-1, "", -1, e, maxName, maxDept, maxDes, maxReportTo);
+                    searchResults = search(-1, "", -1, e, true, maxName, maxDept, maxDes, maxReportTo);
                     tableHeaders(maxName, maxDept, maxDes, maxReportTo);
                     for (employee result : searchResults) {
                         result.display(maxName, maxDept, maxDes, maxReportTo);
@@ -312,11 +361,32 @@ public class sampleProject {
                     break;
                 }
 
-                // case 4: {
-                //     String empReportQuery;
+                case 4: {
+                    String manReportQuery;
+                    System.out.print("Enter the name of the manager: ");
+                    manReportQuery = stringInput.readLine();
+                    searchResults = search(5, manReportQuery, 1, e, false, maxName, maxDept, maxDes, maxReportTo);
+                    if (searchResults.isEmpty()) {
+                        System.out.println("Sorry! No results. Do you want to do an advanced search? (Y|n): ");
+                        String choice = stringInput.readLine();
+                        if (choice.toLowerCase().startsWith("y"))
+                            searchResults = search(5, "", -1, e, true, maxName, maxDept, maxDes, maxReportTo);
+                    }
+                    else 
+                        System.out.println("The employee(s) managed by "+manReportQuery+" is/are:");
+                    tableHeaders(maxName, maxDept, maxDes, maxReportTo);
+                    for (employee result : searchResults) 
+                        result.display(maxName, maxDept, maxDes, maxReportTo);
+                    printBorder(maxName, maxDept, maxDes, maxReportTo);
+                    break;
+                }
+
+                // case 5:
+                // {
+                //     String empTreeQuery;
                 //     System.out.print("Enter the name of the employee: ");
-                //     empReportQuery = stringInput.readLine();
-                    
+                //     empTreeQuery = stringInput.readLine();
+                //     searchResults = search(fieldType, searchTerm, filter, emp, displayFlag, maxName, maxDept, maxDes, maxReportTo)
                 // }
 
                 default:

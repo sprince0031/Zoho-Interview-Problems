@@ -65,7 +65,7 @@ class employee {
         }
     }
 
-    void search(int filter, int searchTerm, int dataMember, int maxName, int maxDept, int maxDes, int maxReportTo) {
+    void search(int filter, int searchTerm, int dataMember, int upper, int lower, int maxName, int maxDept, int maxDes, int maxReportTo) {
         switch(filter) {
             case 1:
                 if(dataMember == searchTerm)
@@ -85,13 +85,9 @@ class employee {
                 break;
             case 5:
                 {
-                    Scanner input = new Scanner(System.in);
-                    System.out.print("Enter the upper value of the range: ");
-                    int upper = input.nextInt();
-                    System.out.print("Enter the lower value of the range: ");
-                    int lower = input.nextInt();
+                    // Scanner input = new Scanner(System.in);
                     // input.close();
-                    if(searchTerm <= upper && searchTerm >= lower)
+                    if(dataMember <= upper && dataMember >= lower)
                         display(maxName, maxDept, maxDes, maxReportTo);
                 }
                 break;
@@ -126,38 +122,42 @@ class tester extends employee {
 
 public class sampleProject {
 
-    // static void foreachMethod(ArrayList<employee> e, int filter, String searchTerm, ) {
-        
-    //     for(employee record: e) {
-    //         if (record.search(filter, searchTerm, dataMember))
-    //     }
-    // }
-
     static void search(int fieldType, String searchTerm, int filter, ArrayList<employee> emp, int maxName, int maxDept, int maxDes, int maxReportTo) {
         Scanner input = new Scanner(System.in);
+        int upper = -1;
+        int lower = -1;
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
         if (fieldType == -1) {
             System.out.print("Enter the field to search with:\n1. Name\n2. Age\n3. Department\n4. Designation\n5. Reports To\nEnter choice: ");
             fieldType = input.nextInt();
-            if (fieldType == 2)
+            if (fieldType == 2) 
                 System.out.print("Select the search filter:\n1. Equal to\n2. Not equal to\n3. Greater than\n4. Less than\n5. Range\nEnter choice: ");
+
             else
                 System.out.print("Select the search filter:\n1. Exactly matches\n2. Does not match\n3. Starts with\n4. Ends with\n5. Contains\n6. Does not contain\nEnter choice: ");
             filter = input.nextInt();
-
-            System.out.print("Enter search term: ");
-            try {
-                searchTerm = stringInput.readLine();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            if (fieldType == 2 && filter == 5) {
+                System.out.print("Enter the upper value of the range: ");
+                upper = input.nextInt();
+                System.out.print("Enter the lower value of the range: ");
+                lower = input.nextInt();
+                searchTerm = "-1";
+            }
+            else {
+                System.out.print("Enter search term: ");
+                try {
+                    searchTerm = stringInput.readLine();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }
         tableHeaders(maxName, maxDept, maxDes, maxReportTo);
         if (fieldType == 2) {
             
             for (employee record : emp) {
-                record.search(filter, Integer.parseInt(searchTerm), record.Age, maxName, maxDept, maxDes, maxReportTo);
+                record.search(filter, Integer.parseInt(searchTerm), record.Age, upper, lower, maxName, maxDept, maxDes, maxReportTo);
             }    
         }
         else {        
@@ -275,8 +275,7 @@ public class sampleProject {
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
         int ch = -1;
         while (ch != 0) {
-            System.out.println(
-                    "1. Display\n2. Enter new record\n3. Search\n4. Manager Report\n5. Employee Tree\n6. Summary\n7. Perform Employee Type Specific Task\n0. Exit");
+            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report (TODO)\n5. Employee Tree(TODO)\n6. Summary(TODO)\n7. Perform Employee Type Specific Task(TODO)\n0. Exit");
             System.out.print("Enter choice: ");
             ch = input.nextInt();
             switch (ch) {
@@ -321,16 +320,16 @@ public class sampleProject {
                 break;
                 }
 
-                case 7:
-                {
+                // case 7:
+                // {
                     
-                    System.out.println("Enter employee's department: ");
-                    // String empDept = stringInput.readLine();
-                    // if (empDept == "Development") {
+                //     System.out.println("Enter employee's department: ");
+                //     // String empDept = stringInput.readLine();
+                //     // if (empDept == "Development") {
                         
-                    // }
-                    break;
-                }
+                //     // }
+                //     break;
+                // }
 
                 default:
                     System.out.println("Please enter a valid option!");

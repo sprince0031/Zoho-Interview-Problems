@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
@@ -13,7 +14,7 @@ import java.io.InputStreamReader;
 class employee {
     int Id, Age;
     String Name, Dept, Des, RepTo;
-    public employee(int id, String name, int age, String dept, String des, String reportTo) {
+    public employee(Integer id, String name, Integer age, String dept, String des, String reportTo) {
         Id = id;
         Name = name;
         Age = age;
@@ -318,19 +319,22 @@ public class sampleProject {
         String name, dept, des, reportTo;
         ArrayList<employee> emp = new ArrayList<employee>();
         ArrayList<employee> searchResults = new ArrayList<employee>();
-        BufferedWriter fileWrite = new BufferedWriter(new FileWriter("employee_table.csv"));
+        File file = new File("employee_table.csv");
+        if (!file.exists())
+            file.createNewFile();
         String line = null;
-        String[] data = null;
+        String[] data = null;   
         try (BufferedReader fileRead = new BufferedReader(new FileReader("employee_table.csv"))) {
             while ((line = fileRead.readLine()) != null) {
                 data = line.split(",");
-                
+                System.out.println(data);
+                emp.add(new employee(Integer.parseInt(data[0]), data[1], Integer.parseInt(data[2]), data[3], data[4], data[5]));
             }
+            id = Integer.parseInt(data[0]);
+            // fileRead.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        emp.add(new employee(++id, "Pricilla Wilson", 45, "HR", "HR Manager", "John Doe"));
-        emp.add(new employee(++id, "Manoj. M", 39, "Development", "Software Development Manager", "Jane Doe"));
-        emp.add(new employee(++id, "Kiruthiga. R", 41, "QA", "QA Manager", "John Doe"));
-        emp.add(new employee(++id, "Siddharth Prince", 35, "Development", "Lead Developer", "Manoj. M"));
         System.out.println("Welcome to the Employee Database Manager!");
         Scanner input = new Scanner(System.in);
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
@@ -371,7 +375,14 @@ public class sampleProject {
                     maxDes = (des.length() > maxDes) ? des.length() : maxDes;
                     maxReportTo = (reportTo.length() > maxReportTo) ? reportTo.length() : maxReportTo;
                     emp.add(new employee(++id, name, age, dept, des, reportTo));
-                    System.out.print("Record successfully created!");
+                    String toAppend = Integer.toString(id)+","+name+","+Integer.toString(age)+","+dept+","+des+","+reportTo;
+                    try (BufferedWriter fileWrite = new BufferedWriter(new FileWriter(file, true))) {
+                        System.out.println(toAppend);
+                        fileWrite.write(toAppend, 0, toAppend.length());
+                        fileWrite.newLine();
+                    }
+                    
+                    System.out.println("Record successfully created!");
                     break;
                 }
 
@@ -467,6 +478,8 @@ public class sampleProject {
             }
         }
         // input.close();
+        // input.close();
+        // fileWrite.close();
 
     }
 }

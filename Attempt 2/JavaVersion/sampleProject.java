@@ -1,7 +1,9 @@
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -322,7 +324,7 @@ public class sampleProject {
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
         int ch = -1;
         while (ch != 0) {
-            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report\n5. Employee Tree\n6. Summary(TODO)\n7. Perform Employee Type Specific Task(TODO)\n0. Exit");
+            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report\n5. Employee Tree\n6. Summary\n7. Perform Employee Type Specific Tasks(TODO)\n0. Exit");
             System.out.print("Enter choice: ");
             ch = input.nextInt();
             switch (ch) {
@@ -396,9 +398,55 @@ public class sampleProject {
                     String empTreeQuery, treeString;
                     System.out.print("Enter the name of the employee: ");
                     empTreeQuery = stringInput.readLine();
+                    searchResults = search(1, empTreeQuery, 1, e, false, maxName, maxDept, maxDes, maxReportTo);
+                    if (searchResults.isEmpty()) {
+                        System.out.println("Sorry! No such employee in database. Try again!");
+                        break;
+                    }
+                    Iterator<employee> it = searchResults.listIterator();
+                    empTreeQuery = it.next().Name;
                     treeString = employeeTree(empTreeQuery, empTreeQuery, e, maxName, maxDept, maxDes, maxReportTo);
                     if (!(treeString.isEmpty()))
                         System.out.println("The employee tree is:\n" + treeString + "\n");
+                    break;
+                }
+
+                case 6:
+                {
+                    System.out.println("\nEmployee Summary:\n");
+                    Map<String, Integer> DeptMap = new HashMap<String, Integer>();
+                    Map<String, Integer> DesMap = new HashMap<String, Integer>();
+                    Map<String, Integer> RepToMap = new HashMap<String, Integer>();
+                    for (employee record: e) {
+                        if (DeptMap.containsKey(record.Dept))
+                            DeptMap.replace(record.Dept, DeptMap.get(record.Dept), DeptMap.get(record.Dept)+1);
+                        else
+                            DeptMap.put(record.Dept, new Integer(1));
+                        if (DesMap.containsKey(record.Des))
+                            DesMap.replace(record.Des, DesMap.get(record.Des), DesMap.get(record.Des)+1);
+                        else
+                            DesMap.put(record.Des, new Integer(1));
+                        if (RepToMap.containsKey(record.RepTo))
+                            RepToMap.replace(record.RepTo, RepToMap.get(record.RepTo), RepToMap.get(record.RepTo)+1);
+                        else
+                            RepToMap.put(record.RepTo, new Integer(1));
+                    }
+                    System.out.println("Departments:");
+                    System.out.println("------------");
+                    int count = 1;
+                    for (String key: DeptMap.keySet()) 
+                        System.out.print(count++ + ". "+key+": "+DeptMap.get(key)+"\n");
+                    System.out.println("\nDesignations:");
+                    System.out.println("-------------");
+                    count = 1;
+                    for (String key: DesMap.keySet()) 
+                        System.out.print(count++ + ". "+key+": "+DesMap.get(key)+"\n");
+                    System.out.println("\nManagers:");
+                    System.out.println("---------");
+                    count = 1;
+                    for (String key: RepToMap.keySet()) 
+                        System.out.print(count++ + ". "+key+": "+RepToMap.get(key)+"\n");
+                    System.out.print("\n");
                     break;
                 }
 

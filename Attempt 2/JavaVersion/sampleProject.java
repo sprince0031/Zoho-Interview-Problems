@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -313,12 +316,21 @@ public class sampleProject {
     public static void main(String[] args) throws IOException {
         int id = 0, age, maxName = 17, maxDept = 20, maxDes = 28, maxReportTo = 8;
         String name, dept, des, reportTo;
-        ArrayList<employee> e = new ArrayList<employee>();
+        ArrayList<employee> emp = new ArrayList<employee>();
         ArrayList<employee> searchResults = new ArrayList<employee>();
-        e.add(new employee(++id, "Pricilla Wilson", 45, "HR", "HR Manager", "John Doe"));
-        e.add(new employee(++id, "Manoj. M", 39, "Development", "Software Development Manager", "Jane Doe"));
-        e.add(new employee(++id, "Kiruthiga. R", 41, "QA", "QA Manager", "John Doe"));
-        e.add(new employee(++id, "Siddharth Prince", 35, "Development", "Lead Developer", "Manoj. M"));
+        BufferedWriter fileWrite = new BufferedWriter(new FileWriter("employee_table.csv"));
+        String line = null;
+        String[] data = null;
+        try (BufferedReader fileRead = new BufferedReader(new FileReader("employee_table.csv"))) {
+            while ((line = fileRead.readLine()) != null) {
+                data = line.split(",");
+                
+            }
+        }
+        emp.add(new employee(++id, "Pricilla Wilson", 45, "HR", "HR Manager", "John Doe"));
+        emp.add(new employee(++id, "Manoj. M", 39, "Development", "Software Development Manager", "Jane Doe"));
+        emp.add(new employee(++id, "Kiruthiga. R", 41, "QA", "QA Manager", "John Doe"));
+        emp.add(new employee(++id, "Siddharth Prince", 35, "Development", "Lead Developer", "Manoj. M"));
         System.out.println("Welcome to the Employee Database Manager!");
         Scanner input = new Scanner(System.in);
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
@@ -336,8 +348,8 @@ public class sampleProject {
 
                 case 1: {
                     tableHeaders(maxName, maxDept, maxDes, maxReportTo);
-                    for (int i = 0; i < e.size(); i++) {
-                        e.get(i).display(maxName, maxDept, maxDes, maxReportTo);
+                    for (int i = 0; i < emp.size(); i++) {
+                        emp.get(i).display(maxName, maxDept, maxDes, maxReportTo);
                         printBorder(maxName, maxDept, maxDes, maxReportTo);
                     }
                     break;
@@ -358,13 +370,13 @@ public class sampleProject {
                     maxDept = (dept.length() > maxDept) ? dept.length() : maxDept;
                     maxDes = (des.length() > maxDes) ? des.length() : maxDes;
                     maxReportTo = (reportTo.length() > maxReportTo) ? reportTo.length() : maxReportTo;
-                    e.add(new employee(++id, name, age, dept, des, reportTo));
+                    emp.add(new employee(++id, name, age, dept, des, reportTo));
                     System.out.print("Record successfully created!");
                     break;
                 }
 
                 case 3: {
-                    searchResults = search(-1, "", -1, e, true, maxName, maxDept, maxDes, maxReportTo);
+                    searchResults = search(-1, "", -1, emp, true, maxName, maxDept, maxDes, maxReportTo);
                     tableHeaders(maxName, maxDept, maxDes, maxReportTo);
                     for (employee result : searchResults) {
                         result.display(maxName, maxDept, maxDes, maxReportTo);
@@ -377,12 +389,12 @@ public class sampleProject {
                     String manReportQuery;
                     System.out.print("Enter the name of the manager: ");
                     manReportQuery = stringInput.readLine();
-                    searchResults = search(5, manReportQuery, 1, e, false, maxName, maxDept, maxDes, maxReportTo);
+                    searchResults = search(5, manReportQuery, 1, emp, false, maxName, maxDept, maxDes, maxReportTo);
                     if (searchResults.isEmpty()) {
                         System.out.println("Sorry! No results. Do you want to do an advanced search? (Y|n): ");
                         String choice = stringInput.readLine();
                         if (choice.toLowerCase().startsWith("y"))
-                            searchResults = search(5, "", -1, e, true, maxName, maxDept, maxDes, maxReportTo);
+                            searchResults = search(5, "", -1, emp, true, maxName, maxDept, maxDes, maxReportTo);
                     }
                     else 
                         System.out.println("The employee(s) managed by "+manReportQuery+" is/are:");
@@ -398,14 +410,14 @@ public class sampleProject {
                     String empTreeQuery, treeString;
                     System.out.print("Enter the name of the employee: ");
                     empTreeQuery = stringInput.readLine();
-                    searchResults = search(1, empTreeQuery, 1, e, false, maxName, maxDept, maxDes, maxReportTo);
+                    searchResults = search(1, empTreeQuery, 1, emp, false, maxName, maxDept, maxDes, maxReportTo);
                     if (searchResults.isEmpty()) {
                         System.out.println("Sorry! No such employee in database. Try again!");
                         break;
                     }
                     Iterator<employee> it = searchResults.listIterator();
                     empTreeQuery = it.next().Name;
-                    treeString = employeeTree(empTreeQuery, empTreeQuery, e, maxName, maxDept, maxDes, maxReportTo);
+                    treeString = employeeTree(empTreeQuery, empTreeQuery, emp, maxName, maxDept, maxDes, maxReportTo);
                     if (!(treeString.isEmpty()))
                         System.out.println("The employee tree is:\n" + treeString + "\n");
                     break;
@@ -417,7 +429,7 @@ public class sampleProject {
                     Map<String, Integer> DeptMap = new HashMap<String, Integer>();
                     Map<String, Integer> DesMap = new HashMap<String, Integer>();
                     Map<String, Integer> RepToMap = new HashMap<String, Integer>();
-                    for (employee record: e) {
+                    for (employee record: emp) {
                         if (DeptMap.containsKey(record.Dept))
                             DeptMap.replace(record.Dept, DeptMap.get(record.Dept), DeptMap.get(record.Dept)+1);
                         else

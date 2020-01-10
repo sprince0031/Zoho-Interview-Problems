@@ -83,29 +83,29 @@ class employee {
 
 }
 
-class dev extends employee {
+// class dev extends employee {
 
-    public dev(int id, String name, int age, String dept, String des, String reportTo) {
-        super(id, name, age, dept, des, reportTo);
-    }
+//     public dev(int id, String name, int age, String dept, String des, String reportTo) {
+//         super(id, name, age, dept, des, reportTo);
+//     }
 
 
 
-}
+// }
 
-class tester extends employee {
+// class tester extends employee {
 
-    int lifeTimeNoOfBugsFound = 0;
-    String CurrentProject, CurrentTeam, LatestTestType;
+//     int lifeTimeNoOfBugsFound = 0;
+//     String CurrentProject, CurrentTeam, LatestTestType;
     
-    public tester(int id, String name, int age, String dept, String des, String reportTo, String latestTestType) {
-        super(id, name, age, dept, des, reportTo);
-        LatestTestType = latestTestType;
-    }
+//     public tester(int id, String name, int age, String dept, String des, String reportTo, String latestTestType) {
+//         super(id, name, age, dept, des, reportTo);
+//         LatestTestType = latestTestType;
+//     }
 
-    // void latestTestDetails()
+//     // void latestTestDetails()
 
-}
+// }
 
 public class sampleProject {
 
@@ -160,7 +160,6 @@ public class sampleProject {
                     try {
                         searchTerm = stringInput.readLine();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
@@ -340,7 +339,7 @@ public class sampleProject {
         BufferedReader stringInput = new BufferedReader(new InputStreamReader(System.in));
         int ch = -1;
         while (ch != 0) {
-            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report\n5. Employee Tree\n6. Summary\n7. Perform Employee Type Specific Tasks(TODO)\n0. Exit");
+            System.out.println("1. Display\n2. Enter new record\n3. Search\n4. Manager Report\n5. Employee Tree\n6. Summary\n0. Exit");
             System.out.print("Enter choice: ");
             ch = input.nextInt();
             switch (ch) {

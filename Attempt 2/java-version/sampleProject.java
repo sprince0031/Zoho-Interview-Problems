@@ -10,102 +10,7 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
-class employee {
-    int Id, Age;
-    String Name, Dept, Des, RepTo;
-    public employee(Integer id, String name, Integer age, String dept, String des, String reportTo) {
-        Id = id;
-        Name = name;
-        Age = age;
-        Dept = dept;
-        Des = des;
-        RepTo = reportTo;
-    }
-
-    void display(int maxName, int maxDept, int maxDes, int maxReportTo) {
-        System.out.print("| " + Id);
-        if (Id < 10) System.out.print("  | " + Name) ;
-        else System.out.print( " | " + Name) ;
-        for (int i = 0; i < maxName - Name.length() + 1; i++)
-            System.out.print(" ");
-        System.out.print( "| " + Age + "  | " + Dept);
-        for (int i = 0; i < maxDept - Dept.length() + 1; i++)
-            System.out.print(" ");
-        System.out.print ("| " + Des);
-        for (int i = 0; i < maxDes - Des.length() + 1; i++)
-            System.out.print( " ");
-        System.out.print("| " + RepTo);
-        for (int i = 0; i < maxReportTo - RepTo.length() + 1; i++)
-            System.out.print(" ");
-        System.out.println("|");
-
-    }
-
-    boolean search(int filter, String searchTerm, String dataMember, int maxName, int maxDept, int maxDes, int maxReportTo) {
-        dataMember = dataMember.toLowerCase();
-        switch(filter) {
-            case 1:
-                return dataMember.equalsIgnoreCase(searchTerm);
-            case 2:
-                return !(dataMember.equalsIgnoreCase(searchTerm));
-            case 3:
-                return dataMember.startsWith(searchTerm.toLowerCase());
-            case 4:
-                return dataMember.endsWith(searchTerm.toLowerCase());
-            case 5:
-                return dataMember.contains(searchTerm.toLowerCase());
-            case 6:
-                return !(dataMember.contains(searchTerm.toLowerCase()));
-        }
-        return false;
-    }
-
-    boolean search(int filter, int searchTerm, int dataMember, int upper, int lower, int maxName, int maxDept, int maxDes, int maxReportTo) {
-        switch(filter) {
-            case 1:
-                return dataMember == searchTerm;
-
-            case 2:
-                return dataMember != searchTerm;
-
-            case 3:
-                return dataMember > searchTerm;
-
-            case 4:
-                return dataMember < searchTerm;
-
-            case 5:
-                return dataMember <= upper && dataMember >= lower;
-        }
-        return false;
-    }
-
-}
-
-// class dev extends employee {
-
-//     public dev(int id, String name, int age, String dept, String des, String reportTo) {
-//         super(id, name, age, dept, des, reportTo);
-//     }
-
-
-
-// }
-
-// class tester extends employee {
-
-//     int lifeTimeNoOfBugsFound = 0;
-//     String CurrentProject, CurrentTeam, LatestTestType;
-    
-//     public tester(int id, String name, int age, String dept, String des, String reportTo, String latestTestType) {
-//         super(id, name, age, dept, des, reportTo);
-//         LatestTestType = latestTestType;
-//     }
-
-//     // void latestTestDetails()
-
-// }
+import employeetable.employee;
 
 public class sampleProject {
 
@@ -327,6 +232,10 @@ public class sampleProject {
             while ((line = fileRead.readLine()) != null) {
                 data = line.split(",");
                 System.out.println(data);
+                maxName = (data[1].length() > maxName) ? data[1].length() : maxName;
+                maxDept = (data[3].length() > maxDept) ? data[3].length() : maxDept;
+                maxDes = (data[4].length() > maxDes) ? data[4].length() : maxDes;
+                maxReportTo = (data[5].length() > maxReportTo) ? data[5].length() : maxReportTo;
                 emp.add(new employee(Integer.parseInt(data[0]), data[1], Integer.parseInt(data[2]), data[3], data[4], data[5]));
             }
             id = Integer.parseInt(data[0]);
@@ -387,6 +296,7 @@ public class sampleProject {
 
                 case 3: {
                     searchResults = search(-1, "", -1, emp, true, maxName, maxDept, maxDes, maxReportTo);
+                    System.out.println("Final results of search are:");
                     tableHeaders(maxName, maxDept, maxDes, maxReportTo);
                     for (employee result : searchResults) {
                         result.display(maxName, maxDept, maxDes, maxReportTo);
@@ -467,7 +377,8 @@ public class sampleProject {
                     System.out.println("---------");
                     count = 1;
                     for (String key: RepToMap.keySet()) 
-                        System.out.print(count++ + ". "+key+": "+RepToMap.get(key)+"\n");
+                        if (!(key.equals("--")))
+                            System.out.print(count++ + ". "+key+": "+RepToMap.get(key)+"\n");
                     System.out.print("\n");
                     break;
                 }

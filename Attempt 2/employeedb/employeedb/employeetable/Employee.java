@@ -1,9 +1,9 @@
-package employeetable;
+package employeedb.employeetable;
 
-public class employee {
+public class Employee {
     public int Id, Age;
     public String Name, Dept, Des, RepTo;
-    public employee(Integer id, String name, Integer age, String dept, String des, String reportTo) {
+    public Employee(Integer id, String name, Integer age, String dept, String des, String reportTo) {
         Id = id;
         Name = name;
         Age = age;
